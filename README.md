@@ -82,18 +82,34 @@ fake_backend.findGames(niners_vs_warriors_fake_game, num_teams_to_match = 1)
 Before you bet on something, its a planned bet
 Since it's just a plan, PlannedBet is a list of fixtures that you can select.
 
-You supply a backend, a league, the type of bet  ("any" if any type is fine"), the entities you're looking for, and whether to find bets with *any* or *all* of the entities included.
+arguments:
+- a backend
+- a league
+- the type of bet  ("any" if any type is fine")
+- the entities you're looking for
+- whether to find bets with "any" or "all" of the entities included
 ```python
 california_basketball_fan = PlannedBet(fake_backend, "NBA", "any", 
     ["Golden State Warriors", "Los Angeles Lakers", "Los Angeles Clippers", "Sacramento Kings"], "any")
 california_football_fan = PlannedBet(fake_backend, "NFL", "any", 
     ["San Francisco 49ers", "Los Angeles Chargers", "Los Angeles Rams"], "any")
 california_sports_fan = california_basketball_fan + california_football_fan
+```
+
+To select a fixture, use `.select` and the selection method, either
+- "random"
+- "last_updated"
+- "soonest"
+- "index" (also takes in an index of the list of fixtures)
+```python
 some_h2h_bet = PlannedBet(fake_backend, "nba", "h2h", []).select("random")
+another_h2h_bet = PlannedBet(fake_backend, "nba", "h2h", []).select("index", -1)
 lebron_james_event = PlannedBet(another_fake_backend, "NBA", "player_assists", ["Lebron James"], "all")
 ```
 
-To bet on one of these, specify the team and the wager amount.
+To bet on one of these, specify 
+- the team
+- the wager amount
 ```python
 home_team_probably_wins = some_h2h_bet.bet("home", 500)
 bigBet = california_sports_fan.select('random').bet("home", 1000)
@@ -115,6 +131,7 @@ implied probability of hit: 0.5283018867924528
 
 A parlay is a bet that's composed of other smaller bets (legs). All of the bets must hit, and the odds are combined.
 Note that actual betting sites typically offer very different odds than you might expect for these (often worse).
+To create one, specify a list of bets.
 ```python
 myParlay = Parlay([bigBet, smallBet, lebron_bet])
 ```
