@@ -1,0 +1,99 @@
+{
+    "timestamp": "<string>",
+    "previous_timestamp": "<string>",
+    "next_timestamp": "<string>",
+    "data": {
+      "id": "<string>",
+      "sport_key": "<string>",
+      "sport_title": "<string>",
+      "commence_time": "<dateTime>",
+      "home_team": "<string>",
+      "away_team": "<string>",
+      "bookmakers": [
+        {
+          "key": "<string>",
+          "title": "<string>",
+          "markets": [
+            {
+              "key": "<string>",
+              "last_update": "<dateTime>",
+              "outcomes": [
+                {
+                  "name": "<string>",
+                  "price": "<number>",
+                  "point": "<number>",
+                  "description": "<string>"
+                },
+                {
+                  "name": "<string>",
+                  "price": "<number>",
+                  "point": "<number>",
+                  "description": "<string>"
+                }
+              ]
+            },
+            {
+              "key": "<string>",
+              "last_update": "<dateTime>",
+              "outcomes": [
+                {
+                  "name": "<string>",
+                  "price": "<number>",
+                  "point": "<number>",
+                  "description": "<string>"
+                },
+                {
+                  "name": "<string>",
+                  "price": "<number>",
+                  "point": "<number>",
+                  "description": "<string>"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "<string>",
+          "title": "<string>",
+          "markets": [
+            {
+              "key": "<string>",
+              "last_update": "<dateTime>",
+              "outcomes": [
+                {
+                  "name": "<string>",
+                  "price": "<number>",
+                  "point": "<number>",
+                  "description": "<string>"
+                },
+                {
+                  "name": "<string>",
+                  "price": "<number>",
+                  "point": "<number>",
+                  "description": "<string>"
+                }
+              ]
+            },
+            {
+              "key": "<string>",
+              "last_update": "<dateTime>",
+              "outcomes": [
+                {
+                  "name": "<string>",
+                  "price": "<number>",
+                  "point": "<number>",
+                  "description": "<string>"
+                },
+                {
+                  "name": "<string>",
+                  "price": "<number>",
+                  "point": "<number>",
+                  "description": "<string>"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
