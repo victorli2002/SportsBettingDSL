@@ -48,9 +48,38 @@ Currently, we only support a fakebackend, which is created randomly. You can spe
 fake_backend = FakeBackend(["basketball_nba", "americanfootball_nfl"], seed=57)
 ```
 
+### Fixtures
+
+A Fixture is a scheduled event / scenario / game to bet on. 
+
+You can load fixtures from a backend (through PlannedBet in the next section), or you can also manually construct them.
+Currently supported types are 
+- Head2Head (who wins), 
+- Spreads (cover by winning by more than X (negative) or by not losing by more than X(positive)), 
+- Totals (get at leeast that many points)
+- OverUnderEvent (XXX gets at least XXX)
+
+```
+fake_h2h = Head2Head("49ers", "Warriors", +170, -220)
+fake_spreads = Spreads("49ers", "Warriors", -112, +120, 4.5, -4.5)
+fake_totals = Totals("49ers", "Warriors", -130, -150, 24, 105)
+fake_event = OverUnderEvent("player_assists", 6, "Stephen Curry", -115, -120)
+fake_event.bet(200, "under")
+```
+
+You can also make a fake Game (which is just a list of fixtures that take place during that game).
+```python
+niners_vs_warriors_fake_game = Game("San Francisco 49ers", "Golden State Warriors", [fake_h2h, fake_spreads, fake_totals, fake_event])
+```
+
+To find bets that are close to this game, you can use the findGames function of some backend.
+```python
+fake_backend.findGames(niners_vs_warriors_fake_game, num_teams_to_match = 1)
+```
+
 ### Bets
 
-Before you bet on something, its a planned bet.
+Before you bet on something, its a planned bet
 Since it's just a plan, PlannedBet is a list of fixtures that you can select.
 
 You supply a backend, a league, the type of bet  ("any" if any type is fine"), the entities you're looking for, and whether to find bets with *any* or *all* of the entities included.
@@ -88,33 +117,6 @@ A parlay is a bet that's composed of other smaller bets (legs). All of the bets 
 Note that actual betting sites typically offer very different odds than you might expect for these (often worse).
 ```python
 myParlay = Parlay([bigBet, smallBet, lebron_bet])
-```
-
-### Fixtures
-
-While you can load fixtures from a backend, you can also manually construct them.
-Currently supported types are 
-- Head2Head (who wins), 
-- Spreads (cover by winning by more than X (negative) or by not losing by more than X(positive)), 
-- Totals (get at leeast that many points)
-- OverUnderEvent (XXX gets at least XXX)
-
-```
-fake_h2h = Head2Head("49ers", "Warriors", +170, -220)
-fake_spreads = Spreads("49ers", "Warriors", -112, +120, 4.5, -4.5)
-fake_totals = Totals("49ers", "Warriors", -130, -150, 24, 105)
-fake_event = OverUnderEvent("player_assists", 6, "Stephen Curry", -115, -120)
-fake_event.bet(200, "under")
-```
-
-You can also make a fake Game (which is just a list of fixtures that take place during that game).
-```python
-niners_vs_warriors_fake_game = Game("San Francisco 49ers", "Golden State Warriors", [fake_h2h, fake_spreads, fake_totals, fake_event])
-```
-
-To find bets that are close to this game, you can use the findGames function of some backend.
-```python
-fake_backend.findGames(niners_vs_warriors_fake_game, num_teams_to_match = 1)
 ```
 
 ### Strategies
