@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from typing import Callable, List
 
-from backend import Backend
-from fixture import Game, Event
-from bet import RawBet
-import utils
+from .backend import Backend
+from .fixture import Game, Event
+from .bet import RawBet
+from . import utils
 
 @dataclass
 class GameStrategy:

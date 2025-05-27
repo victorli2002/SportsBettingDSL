@@ -2,9 +2,10 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Optional
 import random
-import utils
 
-from bet import RawBet
+import sportsbetpy.utils
+from .bet import RawBet
+
 @dataclass
 class Parlay:
     legs: List[RawBet]

@@ -3,8 +3,8 @@ from datetime import datetime
 from typing import List, Optional
 import random
 
-from bet import RawBet, H2hBet, SpreadsBet, TotalsBet, OutrightsBet, EventsBet
-import utils
+from .bet import RawBet, H2hBet, SpreadsBet, TotalsBet, OutrightsBet, EventsBet
+from . import utils
 
 @dataclass(kw_only=True, frozen=True)
 class Fixture:

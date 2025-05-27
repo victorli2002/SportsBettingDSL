@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
-from leagues import LEAGUE_TEAMS
-from fixture import Head2Head, Totals, Spreads, Event, OverUnderEvent, Game,  Fixture
-import utils
+from .leagues import LEAGUE_TEAMS
+from .fixture import Head2Head, Totals, Spreads, Event, OverUnderEvent, Game,  Fixture
+from .utils import *
 import random
 
 @dataclass
@@ -20,17 +20,17 @@ class Backend:
                     if event_type is not None and f.name != event_type:
                         continue
                     if criteria == 'all':
-                        match = utils.is_subset_of(entities, [f.description])
+                        match = is_subset_of(entities, [f.description])
                     elif criteria == 'any':
-                        match = utils.nonempty_intersection(entities, [f.description])
+                        match = nonempty_intersection(entities, [f.description])
                     else:
                         match = False
                     if match:
                         fixtures.append(f)
             return fixtures
         
-        league_teams = utils.get_teams_from_league(league)
-        if utils.is_subset_of(entities, league_teams) == False:
+        league_teams = get_teams_from_league(league)
+        if is_subset_of(entities, league_teams) == False:
             raise ValueError(f"Error: invalid teams {entities}")
         for team in entities:
             if team not in league_teams:
@@ -38,13 +38,13 @@ class Backend:
                 
         for game in self.fixtures:
             home_team = game.home_team_name
-            if not utils.team_in_league(home_team, league):
+            if not team_in_league(home_team, league):
                 continue
             away_team = game.away_team_name
             if criteria == 'all':
-                match = utils.is_subset_of(entities, [home_team, away_team])
+                match = is_subset_of(entities, [home_team, away_team])
             elif criteria == 'any':
-                match = utils.nonempty_intersection(entities, [home_team, away_team])
+                match = nonempty_intersection(entities, [home_team, away_team])
             else:
                 match = False
             if match:
@@ -78,7 +78,7 @@ class FakeBackend(Backend):
         self.name = f"fake_seed{seed}"
         self.fixtures = []
         for league in leagues:
-            teams = utils.get_teams_from_league(league)
+            teams = get_teams_from_league(league)
             self.fake_week(teams)
 
 
@@ -88,18 +88,18 @@ class FakeBackend(Backend):
         pairs = [teams[i:i+2] for i in range(0, len(teams), 2)]
         for pair in pairs:
             home_team, away_team = pair
-            home_score, away_score = utils.random_nba_score()
+            home_score, away_score = random_nba_score()
 
-            h2h_odds = utils.score_to_h2h_odds(home_score, away_score)
+            h2h_odds = score_to_h2h_odds(home_score, away_score)
             h2h = Head2Head(home_team, away_team, h2h_odds[0], h2h_odds[1], backend_name=self.name)
             rand = random.randint(0, 1)
             diff = away_score - home_score + 0.5
             if rand == 0:
                 diff - 1
             spreads = Spreads(home_team, away_team, 
-                              utils.random_house_odds(), utils.random_house_odds(), diff, -diff, backend_name=self.name)
+                              random_house_odds(), random_house_odds(), diff, -diff, backend_name=self.name)
             totals = Totals(home_team, away_team, 
-                            utils.random_house_odds(), utils.random_house_odds(), home_score, away_score, backend_name=self.name)
+                            random_house_odds(), random_house_odds(), home_score, away_score, backend_name=self.name)
             if home_team == "Los Angeles Lakers" or away_team == "Los Angeles Lakers":
                 event = OverUnderEvent("player_assists", 6.5, "Lebron James", -140, +190, backend_name=self.name)
                 self.fixtures.append(Game(home_team, away_team, [h2h, spreads, totals, event]))

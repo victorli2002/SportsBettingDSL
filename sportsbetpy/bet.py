@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Optional
 import random
-import utils
+from . import utils
 
 @dataclass
 class RawBet:

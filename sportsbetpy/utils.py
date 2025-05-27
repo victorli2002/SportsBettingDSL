@@ -2,8 +2,9 @@ from datetime import datetime
 import random
 import math
 from typing import List
-from leagues import LEAGUE_TEAMS
 from collections import Counter
+
+from .leagues import LEAGUE_TEAMS
 
 def is_subset_of(a: List, b: List) -> bool:
     return set(a).issubset(set(b))
