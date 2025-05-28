@@ -71,6 +71,7 @@ class Totals(Fixture):
     away_team_price: int
     home_team_point: float
     away_team_point: float
+    #should be home_team_name, away_team_name, over_price, under_price, over_point, under_point
 
     def bet(self, team, wager):
         if utils.team_picker(team, self.home_team_name, self.away_team_name) == 0:
@@ -90,11 +91,12 @@ class Totals(Fixture):
 class Game:
     home_team_name: str
     away_team_name: str
-    # maybe date
     fixtures: List[Fixture]
+    commence_time: datetime | str = field(default_factory=datetime.now)
 
     def __str__(self):
-        s = f"Game: {self.home_team_name} vs {self.away_team_name}\n\n"
+        s = "*"*80
+        s += f"\nGame: {self.home_team_name} vs {self.away_team_name}\n\n"
         for f in self.fixtures:
             s += f"{str(f)}\n"
         return s

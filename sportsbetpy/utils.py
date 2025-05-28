@@ -18,6 +18,9 @@ def merge_ordered_sets(a: List, b: List) -> List:
     unique_elements = [x for x in combined if counts[x] == 1]
     return sorted(unique_elements,key=lambda x: x.commence_time)
 
+def union_lists(a: List, b: List) -> List:
+    return list(set(a).union(set(b)))
+
 def get_teams_from_league(league: str) -> List[str]:
     if league == "nba" or league == "NBA":
         league = "basketball_nba"
@@ -124,5 +127,13 @@ def print_odds(odds):
         return f"+{odds}"
     return str(odds)
 
-    
-    
+"""def merge_dicts(dicts):
+    combined = {}
+    for dict in dicts:
+        for key, value in dict.items():
+            if key in combined:
+                combined[key] = combined[key] + value
+            else:
+                combined[key] = value
+    return combined
+"""

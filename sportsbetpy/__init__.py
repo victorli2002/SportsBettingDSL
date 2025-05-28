@@ -1,4 +1,4 @@
-from .backend import Backend, FakeBackend
+from .backend import Backend, FakeBackend, SportsBook
 from .fixture import (
     RawBet,
     PlannedBet,
@@ -32,5 +32,6 @@ __all__ = [
     "Parlay",
     "GameStrategy", 
     "BetOnHome", 
-    "BetOnTeamIfHome"
+    "BetOnTeamIfHome",
+    "SportsBook",
 ]
