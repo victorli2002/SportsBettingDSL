@@ -18,11 +18,11 @@ class RawBet:
         if isinstance(self.wager, str) | isinstance(self.wager, int):
             self.wager = float(self.wager)
         if not isinstance(self.odds, int):
-            raise TypeError("Error: odds must be an integer")
+            raise TypeError(f"Error: odds must be an integer, instead {self.odds} ({type(self.odds)})")
         if self.odds == 0:
             raise ValueError("Error: invalid odds")
         if not isinstance(self.wager, float):
-            raise TypeError("Error: wager must be a float")
+            raise TypeError(f"Error: wager must be a float, instead {self.wager} ({type(self.wager)})")
         if self.wager < 0:
             raise ValueError("Error: wager cannot be negative")
         
@@ -99,18 +99,21 @@ class SpreadsBet(RawBet):
 
 @dataclass
 class TotalsBet(RawBet):
-    team: str
+    home_team_name: str
+    away_team_name: str
+    over: bool
     point: float
 
     def __str__(self):
         s = ""
-        s += f"{self.wager} on {self.team} to score over {self.point} points at {utils.print_odds(self.odds)} odds\n"
+        over_under = "over" if self.over else "under"
+        s += f"{self.wager} on {self.home_team_name} and {self.away_team_name} to score {over_under} {self.point} total points at {utils.print_odds(self.odds)} odds\n"
         s += super().__str__()
         return s
     
     def __add__(self, other):
         if isinstance(other, float) | isinstance(other, int):
-            return TotalsBet(self.backend_name, self.odds, self.wager + other, self.team, self.point)
+            return TotalsBet(self.backend_name, self.odds, self.wager + other, self.over, self.point)
         return super().__add__(other)
 
 class OutrightsBet(RawBet):

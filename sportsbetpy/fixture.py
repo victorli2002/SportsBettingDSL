@@ -67,23 +67,26 @@ class Spreads(Fixture):
 class Totals(Fixture):
     home_team_name: str
     away_team_name: str
-    home_team_price: int
-    away_team_price: int
-    home_team_point: float
-    away_team_point: float
-    #should be home_team_name, away_team_name, over_price, under_price, over_point, under_point
+    over_price: int
+    under_price: int
+    over_point: float
+    under_point: float
 
-    def bet(self, team, wager):
-        if utils.team_picker(team, self.home_team_name, self.away_team_name) == 0:
-            return TotalsBet(self.backend_name, self.home_team_price, wager, self.home_team_name, self.home_team_point)
-        return TotalsBet(self.backend_name, self.away_team_price, wager, self.away_team_name, self.away_team_point)
+    def bet(self, over_under, wager):
+        if not over_under in ['over', 'Over', 'under', 'Under']:
+            raise ValueError(f'must pick over or under instead of {over_under}')
+        match over_under:
+            case 'over' | 'Over':
+                return TotalsBet(self.backend_name, self.over_price, wager, self.home_team_name, self.away_team_name, True, self.over_point)
+            case 'under' | 'Under':
+                return TotalsBet(self.backend_name, self.under_price, wager, self.home_team_name, self.away_team_name, False, self.under_point)
     
     def __str__(self):
         s = "Totals:\n"
         s += super().__str__()
-        s += f"\n{self.home_team_name} {self.home_team_point} ({utils.print_odds(self.home_team_price)})"
-        s += f"\nvs"
-        s += f"\n{self.away_team_name} {self.away_team_point} ({utils.print_odds(self.away_team_price)})"
+        s += f"\n{self.home_team_name} vs {self.away_team_name}"
+        s += f"\nOver {self.over_point} at {utils.print_odds(self.over_price)}"
+        s += f"\nUnder {self.under_point} at {utils.print_odds(self.under_price)}"
         s += '\n'
         return s
 

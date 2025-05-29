@@ -6,6 +6,7 @@ from .utils import *
 import random
 import json
 import os
+import requests
 from copy import deepcopy
 
 @dataclass
@@ -140,8 +141,32 @@ SPORTSBOOKS = {
     'MyBookie.ag': 'mybookieag',
     'Bovada': 'bovada'
 }
+    
+def TheOdds(leagues=None, events=False, ts=datetime.now()):
+    api_key = os.getenv("API_KEY")
+    if not api_key:
+        raise RuntimeError("API key not set in environment")
+    
+    if leagues is None:
+        leagues = list(LEAGUE_TEAMS.keys())
+    if not is_subset_of(leagues, list(LEAGUE_TEAMS.keys())):
+        raise ValueError("Invalid leagues")
+    
+    jsons = []
+    for league in leagues:
+        response = requests.get(f"https://api.the-odds-api.com/v4/historical/sports/{league}/odds/?apiKey={api_key}&regions=us&markets=h2h,spreads,totals&oddsFormat=american&date={ts.strftime('%Y-%m-%dT%H:%M:%SZ')}")
+        if response.status_code == 200:
+            jsons.append(response.json())
+        else:
+            print(f"Error: {response.status_code}")
+            print(response.text)
 
-def SportsBook(name):
+    backends = {}
+    for backend_json in jsons:
+        backends = from_theodds_json(backend_json, backends)
+    return backends
+
+def SportsBook(name, backends=None):
     if name not in SPORTSBOOKS.keys():
         if name not in SPORTSBOOKS.values():
             raise ValueError(f"{name} is not a valid sportsbook.")
@@ -149,10 +174,18 @@ def SportsBook(name):
     else:
         backend_key = SPORTSBOOKS[name]
 
-    backends = load_backends()
-    backend = backends[backend_key]
+    match backends:
+        case None:
+            backend_dict = load_backends()
+        case 'TheOddsAPI':
+            backend_dict = TheOdds(list(LEAGUE_TEAMS.keys()))
+        case _:
+            backend_dict = backends
+    backend = backend_dict[backend_key]
     return backend
 
+def all_sportsbooks():
+    return list(load_backends().values())
 
 def load_backends(paths=None):
     if paths is None:
@@ -193,21 +226,27 @@ def from_theodds_json(json, backends={}):
             fixtures = []
             for market in bookmaker['markets']:
                 type = market['key']
-                if type == 'totals': # temporary
-                    continue
-                for outcome in market['outcomes']:
-                    team = outcome['name']
-                    if not team in [home, away]:
-                        raise ValueError(f"Couldn't find team {team} in {[home, away]}")
-                    assert team in LEAGUE_TEAMS[sport]
-                    if team == home:
-                        home_price = outcome['price']
-                        if 'point' in outcome:
-                            home_point = outcome['point']
+                for outcome in market['outcomes']:                
+                    if type == 'totals': # temporary
+                        if outcome['name'] == 'Over':
+                            over_price = int(outcome['price'])
+                            over_point = outcome['point']
+                        else:
+                            under_price = int(outcome['price'])
+                            under_point = outcome['point']
                     else:
-                        away_price = outcome['price']
-                        if 'point' in outcome:
-                            away_point = outcome['point']
+                        team = outcome['name']
+                        if not team in [home, away]:
+                            raise ValueError(f"Couldn't find team {team} in {[home, away]}")
+                        assert team in LEAGUE_TEAMS[sport]
+                        if team == home:
+                            home_price = int(outcome['price'])
+                            if 'point' in outcome:
+                                home_point = outcome['point']
+                        else:
+                            away_price = int(outcome['price'])
+                            if 'point' in outcome:
+                                away_point = outcome['point']
                     
                 match type:
                     case 'h2h':
@@ -224,7 +263,12 @@ def from_theodds_json(json, backends={}):
                             timestamp=ts, commence_time=commence_time, backend_name=backend_name
                             )
                     case 'totals':
-                        raise NotImplementedError
+                        fixture = Totals(
+                            home, away,
+                            over_price, under_price,
+                            over_point, under_point,
+                            timestamp=ts, commence_time=commence_time, backend_name=backend_name
+                        )
                     case _:
                         fixture = None
                 if not fixture is None:
