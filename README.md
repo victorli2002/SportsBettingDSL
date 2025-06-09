@@ -8,16 +8,16 @@
 
 ## Features
 
-- Obtain fake sports bets from your favorite NBA, NFL, MLB, or NHL teams
+- Obtain real (or mock) betting lines for your favorite NBA, NFL, MLB, or NHL teams
 - Search for bets that match your desired criteria
 - Create hypothetical parlays and analyze them
-- Apply strategies to 
+- Apply strategies to different games/backends in order to find the best bets for you
 - Look at odds, implied probability, payout
 
-## Soon-to-be Implemented
+## Not-yet Implemented
 
 - More prebuilt strategies
-- Real-time/historical sports betting data so you can move to the realm of reality
+- Easier accessing of historical odds
 
 ---
 
