@@ -50,7 +50,7 @@ fake_backend = FakeBackend(["basketball_nba", "americanfootball_nfl"], seed=57)
 
 Alternatively, use a real backend with an API key from TheOddsAPI, or load a historical snapshot of them.
 You can use `print(SPORTSBOOKS)` in order to see which sportsbooks are currently available.
-```
+```python
 # historical snapshot
 draftkings = SportsBook('draftkings')
 
