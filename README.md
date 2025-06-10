@@ -43,9 +43,14 @@
 ### Loading Backends
 
 The first step is to load a backend that contains information on available bets. 
-Currently, we only support a fakebackend, which is created randomly. You can specify the league(s) to include.
+You can load in a fakebackend, which is created randomly. You can specify the league(s) to include.
 ```python
 fake_backend = FakeBackend(["basketball_nba", "americanfootball_nfl"], seed=57)
+```
+
+Alternatively, use a real backend with an API key from TheOddsAPI, or load a historical snapshot of them.
+```
+draftkings = SportsBook('draftkings')
 ```
 
 ### Fixtures
