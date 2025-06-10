@@ -100,7 +100,7 @@ fake_backend.findGames(niners_vs_warriors_fake_game, num_teams_to_match = 1)
 ### Bets
 
 Before you bet on something, its a planned bet
-Since it's just a plan, PlannedBet is a list of fixtures that you can select.
+Since it's just a plan, PlannedBet actually just a list of fixtures that you can select.
 
 arguments:
 - a backend
@@ -158,11 +158,14 @@ myParlay = Parlay([bigBet, smallBet, lebron_bet])
 
 ### Strategies
 
-Strategies are basically just lambdas. Currently, there are two supported predefined strategies:
-- BetOnHome
-- BetOnTeamIfHome
+Strategies are basically just lambdas. Currently, there are three supported predefined strategies:
+- BetOnHome (game level strategy)
+- BetOnTeamIfHome (game level strategy)
+- BestBets (backend level strategy)
 ```python
 bet = BetOnHome(60).apply(game) # the wager is 60
 chase_center_bet = BetOnTeamIfHome("Golden State Warriors", 60).apply(game): # the wager is 60
+game = Game('Los Angeles Chargers', 'Denver Broncos', [])
+BestBets(game, 'Los Angeles Chargers', 100).apply(all_sportsbooks()) # pick the best bets for this game from all sportsbooks
 ```
 
