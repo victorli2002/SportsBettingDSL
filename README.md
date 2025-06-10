@@ -50,6 +50,7 @@ fake_backend = FakeBackend(["basketball_nba", "americanfootball_nfl"], seed=57)
 
 Alternatively, use a real backend with an API key from TheOddsAPI, or load a historical snapshot of them.
 You can use `print(SPORTSBOOKS)` in order to see which sportsbooks are currently available.
+From there, select a sportsbook, and the betting lines for that sportsbook will be loaded in as the backend.
 ```python
 # historical snapshot
 draftkings = SportsBook('draftkings')
@@ -99,7 +100,7 @@ fake_backend.findGames(niners_vs_warriors_fake_game, num_teams_to_match = 1)
 
 ### Bets
 
-Before you bet on something, its a planned bet
+Before you bet on something, its a planned bet.
 Since it's just a plan, PlannedBet actually just a list of fixtures that you can select.
 
 arguments:
