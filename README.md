@@ -49,8 +49,23 @@ fake_backend = FakeBackend(["basketball_nba", "americanfootball_nfl"], seed=57)
 ```
 
 Alternatively, use a real backend with an API key from TheOddsAPI, or load a historical snapshot of them.
+You can use `print(SPORTSBOOKS)` in order to see which sportsbooks are currently available.
 ```
+# historical snapshot
 draftkings = SportsBook('draftkings')
+
+
+# using api key
+import os
+from getpass import getpass
+
+os.environ["API_KEY"] = getpass("Enter your The Odds API key: ")
+fanduel = SportsBook('FanDuel', 'TheOddsAPI')
+
+# Alternatively, obtain the backends first before getting the Sportbook.
+
+backends = TheOdds()
+bovada = SportsBook('Bovada', backends)
 ```
 
 ### Fixtures
