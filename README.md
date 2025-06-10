@@ -158,7 +158,7 @@ myParlay = Parlay([bigBet, smallBet, lebron_bet])
 
 ### Strategies
 
-Strategies are basically just lambdas. Currently, there are three supported predefined strategies:
+Strategies are basically just lambdas meant to help you select bets that fit your mood. Currently, there are three supported predefined strategies:
 - BetOnHome (game level strategy)
 - BetOnTeamIfHome (game level strategy)
 - BestBets (backend level strategy)
@@ -166,6 +166,6 @@ Strategies are basically just lambdas. Currently, there are three supported pred
 bet = BetOnHome(60).apply(game) # the wager is 60
 chase_center_bet = BetOnTeamIfHome("Golden State Warriors", 60).apply(game): # the wager is 60
 game = Game('Los Angeles Chargers', 'Denver Broncos', [])
-BestBets(game, 'Los Angeles Chargers', 100).apply(all_sportsbooks()) # pick the best bets for this game from all sportsbooks
+BestBets(game, 'Los Angeles Chargers', 100).apply(all_sportsbooks()) # pick the best bets in favor of the Chargers for this game from all sportsbooks
 ```
 
